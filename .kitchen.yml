@@ -1,0 +1,34 @@
+---
+driver:
+  name: vagrant
+
+transport:
+  name: winrm
+  elevated: true
+
+provisioner:
+  name: chef_zero
+  always_update_cookbooks: true
+  require_chef_omnibus: '13'
+  client_rb:
+    chef_license: accept
+  
+verifier:
+  name: inspec
+
+platforms:
+  - name: windows-2012r2
+    driver:
+      box: tas50/windows_2012r2
+  - name: linux
+    driver:
+      box: bento/centos-7 
+
+suites:
+  - name: default
+    run_list:
+      - recipe[rapid7::default]
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
